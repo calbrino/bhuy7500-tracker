@@ -2,15 +2,41 @@
 
 
     "scripts": {
+
+
         "start": "node server.js",
+
+
         "prestart": "parcel build ./public/index.html",
+
+
         "dev": "parcel serve ./public/index.html"
+
+
     },
+
+
     "dependencies": {
+
+
+        "bootstrap": "^5.3.3",
+
+
         "express": "^4.19.2"
+
+
     },
+
+
     "devDependencies": {
+
+
         "parcel": "^2.12.0"
+
+
     }
+
+
 }
+
 
