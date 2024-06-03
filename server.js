@@ -1,12 +1,16 @@
 const express = require('express');
+const path = require('path');
 const app = express();
-app.use(express.static(__dirname + '/dist'));
-app.get('/', function (req, res) {
-    res.sendFile(__dirname + '/dist/index.html')
+const port = 8888;
 
+// Serve static files from the 'dist' directory (created by Parcel)
+app.use(express.static(path.join(__dirname, 'dist'))); 
 
-})
+// Catch-all route for SPA routing
+app.get('*', (req, res) => {
+  res.sendFile(path.join(__dirname, 'dist', 'index.html'));
+});
 
-let server = app.listen(8888, function () {
-    console.log("App server is running on port 8888");
+app.listen(port, () => {
+  console.log(`Server running at http://localhost:${port}`);
 });

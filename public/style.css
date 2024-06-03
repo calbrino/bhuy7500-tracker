@@ -1,7 +1,5 @@
-.hero-container {
-    background-color: #30303d; /* Dark blue color */
-    border-radius: 20px; /* Adjust the radius for desired curvature */
-    padding: 20px; /* Adjust padding for content spacing */
-    color: white; /* Text color for better contrast */
-  }
-  
+/* Basic styling for visibility */
+body {
+  background-color: #fff; /* White background */
+  color: #333;          /* Dark text color */
+}
