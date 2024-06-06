@@ -35,21 +35,18 @@ const router = async () => {
     };
 
     const view = new match.route.view();
-
+    await view.render();
 
     document.querySelector("#app").innerHTML = await view.getHtml();
 };
 
-
 window.addEventListener("popstate", router);
 
 document.addEventListener("DOMContentLoaded", () => {
-    document.body.addEventListener("click", e => {
-
+    document.body.addEventListener("click", async (e) => {
         if (e.target.matches("[data-link]")) {
             e.preventDefault();
-            navigateTo(e.target.href);
-        }
+            navigateTo(e.target.href);}
     });
     router();
 });
