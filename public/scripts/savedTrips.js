@@ -1,54 +1,106 @@
 import AbstractView from "./AbstractView.js";
 
-export default class extends AbstractView {
+export default class SavedTripsView extends AbstractView {
     constructor(params) {
         super(params);
         this.setTitle("Di - Saved Trips");
     }
 
+    // Renders the HTML content of the view
     async getHtml() {
-        const tripData = JSON.parse(localStorage.getItem('tripData')); // Remove the '|| {}' part
-      
-        // Generate HTML content based on tripData
+        const trips = JSON.parse(localStorage.getItem("tripData")) || [];
+
         let tripDetailsHtml = `
-            <div class="container mt-4">
+            <div class="saved-trips-container">
                 <h1>My Saved Trips</h1>
-                <p>Lorem Ipsum is simply dummy text of the printing and typesetting industry. 
-                Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, 
-                when an unknown printer took a galley of type and scrambled it to make a type specimen book.</p>
+                <p>Here are the details of your saved trips.</p>
         `;
-      
-        if (tripData) { // Now check if tripData is not null
-          tripDetailsHtml += `
-              <div class="trip-details">
-                  <p><strong>Number of People:</strong> ${tripData.numPeople}</p>
-                  <p><strong>Traveling With:</strong> ${tripData.travellingWith}</p>
-                  <p><strong>Destination:</strong> ${tripData.destination}</p>
-                  <p><strong>Start Date:</strong> ${tripData.tripStartDate}</p>
-                  <p><strong>End Date:</strong> ${tripData.tripEndDate}</p>
-                  <p><strong>Trip Duration:</strong> ${tripData.tripDuration} days</p>
-                  <p><strong>Additional Destination:</strong> ${tripData.additionalDestination || "None"}</p> 
-                  <p><strong>Accommodation Type:</strong> ${tripData.accommodationType || "Not specified"}</p>
-                  <p><strong>Accommodation Dates:</strong> ${tripData.accommodationDates || "Not specified"}</p>
-                  <p><strong>Food Budget:</strong> ${tripData.foodBudget || "Not specified"}</p>
-                  <p><strong>Breakfast Budget:</strong> ${tripData.breakfast || "Not specified"}</p>
-                  <p><strong>Lunch Budget:</strong> ${tripData.lunch || "Not specified"}</p>
-                  <p><strong>Dinner Budget:</strong> ${tripData.dinner || "Not specified"}</p>
-              </div>
-          `;
+
+        if (trips.length > 0) {
+            trips.forEach((trip, index) => {
+                tripDetailsHtml += `
+                <div class="card">
+                    <div class="card-header">
+                        <span>Trip ${index + 1} ${trip.destination}</span>
+                        <button class="btn btn-danger btn-sm" data-index="${index}" id="deleteTrip-${index}">Delete</button>
+                    </div>
+                    <div class="card-body">
+                        <h5 class="card-title">General Information</h5>
+                        <p class="card-text"><strong>Number of People:</strong> ${trip.numPeople}</p>
+                        <p class="card-text"><strong>Traveling With:</strong> ${trip.travellingWith === "custom" ? trip.customTravellingWith : trip.travellingWith}</p>
+
+                        <h5 class="card-title mt-4">Destination Details</h5>
+                        <p class="card-text"><strong>Destination:</strong> ${trip.destination}</p>
+                        <p class="card-text"><strong>Start Date:</strong> ${trip.tripStartDate}</p>
+                        <p class="card-text"><strong>End Date:</strong> ${trip.tripEndDate}</p>
+
+                        <h5 class="card-title mt-4">Accommodation Details</h5>
+                        <p class="card-text"><strong>Type:</strong> ${trip.accommodation.type}</p>
+                        <p class="card-text"><strong>Start Date:</strong> ${trip.accommodation.startDate}</p>
+                        <p class="card-text"><strong>End Date:</strong> ${trip.accommodation.endDate}</p>
+
+                        <h5 class="card-title mt-4">Meal Budgeting</h5>
+                        <p class="card-text"><strong>Breakfast:</strong> $${trip.breakfast || 'N/A'}</p>
+                        <p class="card-text"><strong>Lunch:</strong> $${trip.lunch || 'N/A'}</p>
+                        <p class="card-text"><strong>Dinner:</strong> $${trip.dinner || 'N/A'}</p>
+
+                        <h5 class="card-title mt-4">Activities</h5>
+                        <ul class="list-group">
+                                ${trip.activities && trip.activities.length > 0 ?
+                                trip.activities.map(act => `<li class="list-group-item">${act.name} (Date: ${act.value})</li>`).join("")
+                                : '<li class="list-group-item">No activities added.</li>'
+                        }
+                        </ul>
+
+                        <h5 class="card-title mt-4">Additional Costs</h5>
+                        <ul class="list-group">
+                                ${trip.additionalCosts && trip.additionalCosts.length > 0 ?
+                                trip.additionalCosts.map(cost => `<li class="list-group-item">${cost.name} ($${cost.value})</li>`).join("")
+                                : '<li class="list-group-item">No additional costs added.</li>'
+                        }
+                        </ul>
+                    </div>
+                </div>
+                `;
+            });
         } else {
-          tripDetailsHtml = "<p>No saved trips yet.</p>";
+            tripDetailsHtml += "<p>No saved trips yet.</p>";
         }
 
-        
+        tripDetailsHtml += '</div>';
+
         return `
-            <head>
-                <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
-                <link rel="stylesheet" href="public/index.css">
-            </head>
-            <body>
-                ${tripDetailsHtml}
-            </body>
+          <head>
+            <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+            <link rel="stylesheet" href="public/index.css">
+          </head>
+          <body>
+            ${tripDetailsHtml} 
+          </body>
         `;
+    }
+
+    // Initializes view-specific elements and event listeners
+    async init() {
+        this.attachDeleteTripListeners();
+    }
+
+    // Attaches listeners to delete buttons
+    attachDeleteTripListeners() {
+        const deleteButtons = document.querySelectorAll("[id^='deleteTrip-']");
+        deleteButtons.forEach(button => {
+            button.addEventListener("click", (event) => {
+                const tripIndex = event.target.getAttribute("data-index");
+                this.deleteTrip(tripIndex);
+            });
+        });
+    }
+
+    // Deletes a trip from local storage and reloads the view
+    deleteTrip(index) {
+        let trips = JSON.parse(localStorage.getItem("tripData")) || [];
+        trips.splice(index, 1);
+        localStorage.setItem("tripData", JSON.stringify(trips));
+        this.render(); // Re-render the view to reflect changes
     }
 }

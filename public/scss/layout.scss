@@ -1,0 +1,204 @@
+@import 'variables';
+
+body {
+  background-color: $bg-color;
+  font-family: sans-serif;
+
+  p {
+    text-align: left;
+  }
+}
+
+.btn-link {
+  text-decoration: none;
+  color: inherit;
+}
+
+.navbar {
+  background-color: $light-color;
+  box-shadow: $shadow;
+
+  .navbar-brand {
+    font-weight: bold;
+    display: flex;
+    align-items: center;
+
+    img {
+      margin-right: 10px;
+    }
+  }
+
+  .nav-link {
+    color: $text-color !important;
+    font-weight: 500;
+
+    &:hover {
+      color: $primary-color !important;
+    }
+  }
+
+  .navbar-toggler {
+    border: none;
+
+    .navbar-toggler-icon {
+      background-image: url("data:image/svg+xml;charset=utf8,%3Csvg viewBox='0 0 30 30' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath stroke='rgba%2833, 37, 41, 0.5%29' stroke-width='2' stroke-linecap='round' stroke-miterlimit='10' d='M4 7h22M4 15h22M4 23h22'/%3E%3C/svg%3E");
+    }
+  }
+}
+
+.hero {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: 80vh;
+  background-color: $bg-color;
+
+  .container {
+    display: flex;
+    align-items: center;
+    background-color: $light-color;
+    border-radius: $border-radius;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    padding: 20px;
+    max-width: 800px;
+    margin: 0 auto; // Center the container
+  }
+
+  .hero-text {
+    flex: 2;
+    padding: 100px;
+
+    h1 {
+      font-size: 2.5rem;
+      margin-bottom: 1rem;
+    }
+
+    p {
+      margin-bottom: 1.5rem;
+    }
+
+    img {
+      max-width: 400px;
+      border-radius: $border-radius;
+    }
+  }
+}
+
+.btn {
+  padding: 0.5rem 1rem;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  transition: background-color 0.3s;
+
+  &-primary {
+    background-color: $primary-color;
+    border-color: $primary-color;
+    color: $light-color;
+
+    &:hover {
+      background-color: darken($primary-color, 10%);
+      border-color: darken($primary-color, 10%);
+    }
+  }
+
+  &-secondary {
+    background-color: $secondary-color;
+    color: $light-color;
+
+    &:hover {
+      opacity: 0.8;
+    }
+  }
+}
+
+.progress {
+  height: 20px;
+  margin-bottom: 1rem;
+}
+
+.step {
+  display: none; // Hide steps by default
+
+  &.active {
+    display: block; // Show the active step
+  }
+}
+
+#step-container {
+  display: flex;
+  flex-direction: column;
+  padding: 2rem;
+  background-color: $light-color; // Set background color for container
+  border-radius: 8px;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1); // Add shadow effect
+  max-width: 800px; // Increase the max-width for better proportion
+  margin: 0 auto; // Center the container horizontally
+}
+
+.button-container {
+  display: flex;
+  justify-content: space-between;
+  margin-top: 20px;
+}
+
+// Saved Trips Styles
+.saved-trips-container {
+  padding: 2rem;
+  max-width: 800px;
+  margin: 0 auto;
+  background-color: $light-color;
+  border-radius: $border-radius;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+  margin-top: 4rem; // Add margin at the top to match #step-container
+
+  h1 {
+    font-size: 2rem;
+    margin-bottom: 1rem;
+  }
+
+  p {
+    margin-bottom: 2rem;
+  }
+}
+
+.card {
+  margin-bottom: 1.5rem;
+
+  &-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    background-color: $primary-color;
+    color: $light-color;
+    border-radius: $border-radius $border-radius 0 0;
+  }
+
+  &-body {
+    background-color: $bg-color;
+    padding: 1rem;
+    border-radius: 0 0 $border-radius $border-radius;
+  }
+
+  &-title {
+    margin-bottom: 0.5rem;
+  }
+
+  &-text {
+    margin-bottom: 0.75rem;
+  }
+}
+
+.list-group-item {
+  background-color: $light-color;
+}
+
+.btn-danger {
+  background-color: $danger-color;
+  border-color: $danger-color;
+
+  &:hover {
+    background-color: darken($danger-color, 10%);
+    border-color: darken($danger-color, 10%);
+  }
+}
