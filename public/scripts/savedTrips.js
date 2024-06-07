@@ -1,3 +1,5 @@
+//savedTrips.js
+
 import AbstractView from "./abstractView.js";
 import { attachDeleteTripListeners, attachToggleDetailsListeners } from "./eventListeners.js";
 
@@ -117,7 +119,6 @@ export default class SavedTripsView extends AbstractView {
             <link rel="stylesheet" href="public/index.css">
           </head>
           <body>
-          <div class="Section_top"></div> <!-- background animation -->
             ${tripDetailsHtml} 
           </body>
         `;

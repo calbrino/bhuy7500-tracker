@@ -305,12 +305,11 @@ body {
   background-size: cover;
   text-align: center;
   justify-content: center;
-  animation: change 30s infinite ease-in-out; // Increase duration for slower changes
-  
+  animation: change 60s infinite ease-in-out; // Increase duration for slower changes
 }
 
 @keyframes change {
-  0% {
+  0%, 100% {
     background-image: url('../src/bg1.jpg');
   }
   20% {
@@ -324,9 +323,6 @@ body {
   }
   80% {
     background-image: url('../src/bg5.jpg');
-  }
-  100% {
-    background-image: url('../src/background.jpg');
   }
 }
 

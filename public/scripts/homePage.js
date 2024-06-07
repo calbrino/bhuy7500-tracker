@@ -1,3 +1,5 @@
+homePage.js
+
 import AbstractView from "./abstractView.js";
 
 export default class extends AbstractView {
@@ -17,7 +19,6 @@ export default class extends AbstractView {
         </head>
 
         <body class="home-page">
-            <div class="Section_top"></div> <!-- background animation -->
             <div class="hero">
                 <div class="container">
                     <div class="hero-text">

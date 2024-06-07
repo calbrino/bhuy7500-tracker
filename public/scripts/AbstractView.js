@@ -1,3 +1,5 @@
+//abstractView.js
+
 import logoSrc from '../src/logo.png';
 
 export default class {
@@ -10,7 +12,7 @@ export default class {
     }
 
     async getHtml() {
-        return ""; // This will be overridden in your specific view classes
+        return "";
     }
 
     async init() {
@@ -22,6 +24,7 @@ export default class {
 
         const mainContainer = document.createElement('div');
         mainContainer.innerHTML = `
+            <div class="Section_top"></div> <!-- background animation -->
             <header>
                 <nav class="navbar navbar-expand-lg navbar-light bg-light">
                     <div class="container">
@@ -50,7 +53,7 @@ export default class {
         const appElement = document.querySelector('#app');
         if (appElement) {
             appElement.innerHTML = ''; // Clear the existing content
-            appElement.appendChild(mainContainer);
+            appElement.innerHTML = mainContainer.outerHTML;
         } else {
             console.error("App element not found");
         }
