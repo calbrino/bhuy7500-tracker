@@ -10,7 +10,7 @@ export default class {
     }
 
     async getHtml() {
-        return "";
+        return ""; // This will be overridden in your specific view classes
     }
 
     async init() {
@@ -28,10 +28,7 @@ export default class {
                         <a class="navbar-brand" href="/homepage">
                             <img id="logoImage" src="${logoSrc}" height="30" alt="Di Trip Planner Logo">
                         </a>
-                        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
-                            <span class="navbar-toggler-icon"></span>
-                        </button>
-                        <div class="collapse navbar-collapse" id="navbarNav">
+                        <div class="navbar-collapse" id="navbarNav">
                             <ul class="navbar-nav ml-auto">
                                 <li class="nav-item">
                                     <a class="nav-link" href="/newtrip" data-link>New Trip</a>
@@ -53,7 +50,7 @@ export default class {
         const appElement = document.querySelector('#app');
         if (appElement) {
             appElement.innerHTML = ''; // Clear the existing content
-            appElement.innerHTML = mainContainer.outerHTML;
+            appElement.appendChild(mainContainer);
         } else {
             console.error("App element not found");
         }

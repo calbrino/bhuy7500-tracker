@@ -1,10 +1,21 @@
-import AbstractView from "./AbstractView.js";
+import AbstractView from "./abstractView.js";
+import {
+    attachPeopleCounterListeners,
+    attachTravelingWithListener,
+    attachActivityListeners,
+    attachAdditionalCostsListeners,
+    attachDestinationListeners,
+    attachAccommodationListeners,
+    attachMealBudgetListeners,
+    attachDateListeners,
+} from "./eventListeners.js";
 
 export default class NewTripView extends AbstractView {
     constructor(params) {
         super(params);
         this.setTitle("Di - New Trip");
         this.currentStep = 0; // Track the current step
+        this.totalSteps = 6; // Total number of steps
     }
 
     // Renders the HTML content of the view
@@ -15,34 +26,41 @@ export default class NewTripView extends AbstractView {
                 <link rel="stylesheet" href="public/index.css">
             </head>
             <body>
-                <div class="container mt-4" id="step-container">
-                    <h1>Plan Your Trip</h1>
-                    <br> 
-                    <form id="tripForm">
-                        <div class="step" id="step-0" style="display: block;">
-                            ${this.destinationInputHtml()}
+            <div class="Section_top"></div> <!-- background animation -->
+                <div class="container form-container mt-4">
+                    <div id="step-container">
+                        <h1>Plan Your Trip</h1><br>
+                        <div class="progress fixed-progress">
+                            <div class="progress-bar" role="progressbar" style="width: 0%;" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100"></div>
                         </div>
-                        <div class="step" id="step-1" style="display: none;">
-                            ${this.peopleInputHtml()}
-                            ${this.travelWithInputHtml()}
+                        <div class="scrollable-content">
+                            <form id="tripForm" class="form mt-2">
+                                <div class="step" id="step-0" style="display: block;">
+                                    ${this.destinationInputHtml()}
+                                </div>
+                                <div class="step" id="step-1" style="display: none;">
+                                    ${this.peopleInputHtml()}
+                                    ${this.travelWithInputHtml()}
+                                </div>
+                                <div class="step" id="step-2" style="display: none;">
+                                    ${this.accommodationInputHtml()}
+                                </div>
+                                <div class="step" id="step-3" style="display: none;">
+                                    ${this.mealBudgetingHtml()}   
+                                </div>
+                                <div class="step" id="step-4" style="display: none;">
+                                    ${this.activitiesHtml()}
+                                </div>
+                                <div class="step" id="step-5" style="display: none;">
+                                    ${this.additionalCostsHtml()}
+                                </div>
+                            </form>
                         </div>
-                        <div class="step" id="step-2" style="display: none;">
-                             ${this.accommodationInputHtml()}
+                        <div class="d-flex justify-content-between mt-3">
+                            <button type="button" class="btn btn-secondary" id="prevStep" disabled>Previous</button>
+                            <button type="button" class="btn btn-primary" id="nextStep">Next</button>
+                            <button type="button" class="btn btn-primary" id="submitTrip" style="display: none;">Submit</button>
                         </div>
-                        <div class="step" id="step-3" style="display: none;">
-                             ${this.mealBudgetingHtml()}   
-                        </div>
-                        <div class="step" id="step-4" style="display: none;">
-                            ${this.activitiesHtml()}
-                        </div>
-                        <div class="step" id="step-5" style="display: none;">
-                        ${this.additionalCostsHtml()}
-                        </div>
-                    </form>
-                    <div class="d-flex justify-content-between mt-3">
-                        <button type="button" class="btn btn-secondary" id="prevStep" disabled>Previous</button>
-                        <button type="button" class="btn btn-primary" id="nextStep">Next</button>
-                        <button type="button" class="btn btn-primary" id="submitTrip" style="display: none;">Submit</button>
                     </div>
                 </div>
             </body>
@@ -51,11 +69,17 @@ export default class NewTripView extends AbstractView {
 
     // Initialize event listeners for pagination
     async init() {
-        this.attachPeopleCounterListeners();
-        this.attachTravelingWithListener();
-        await this.populateCountriesDropdown('destination');
+        attachPeopleCounterListeners();
+        attachTravelingWithListener();
+        await this.populateCountriesDropdown('destination-1');
         this.attachStepListeners();
         this.attachSubmitTripListener();
+        attachActivityListeners();
+        attachAdditionalCostsListeners();
+        attachDestinationListeners(this.populateCountriesDropdown);
+        attachAccommodationListeners();
+        attachMealBudgetListeners(() => this.getTripDuration());
+        attachDateListeners(() => this.getTripDuration());
     }
 
     // Attach listeners to the navigation buttons
@@ -75,32 +99,54 @@ export default class NewTripView extends AbstractView {
         this.currentStep += direction;
         steps[this.currentStep].style.display = "block";
 
+        // Update progress bar
+        this.updateProgressBar();
+
         // Update button visibility and disabled state
         document.getElementById("prevStep").disabled = this.currentStep === 0;
         document.getElementById("nextStep").style.display = this.currentStep < steps.length - 1 ? "block" : "none";
         document.getElementById("submitTrip").style.display = this.currentStep === steps.length - 1 ? "block" : "none";
     }
 
+    // Update the progress bar based on the current step
+    updateProgressBar() {
+        const progress = (this.currentStep / (this.totalSteps - 1)) * 100;
+        const progressBar = document.querySelector(".progress-bar");
+        progressBar.style.width = `${progress}%`;
+        progressBar.setAttribute("aria-valuenow", progress);
+    }
+
+    getTripDuration() {
+        const tripStartDate = document.getElementById("tripStartDate-1").value;
+        const tripEndDate = document.getElementById("tripEndDate-1").value;
+        const startDate = new Date(tripStartDate).getTime();
+        const endDate = new Date(tripEndDate).getTime();
+        return Math.ceil((endDate - startDate) / (1000 * 60 * 60 * 24));
+    }
+
     // HTML template for destination input section
     destinationInputHtml() {
         return `
             <h2>Destination Details</h2>
-            <div class="form-group">
-                <label for="destination">Destination:</label>
-                <select class="form-control" id="destination">
-                    <option value="">Select Destination</option>
-                </select>
-            </div>
-            <div class="form-row">
-                <div class="form-group col-md-6">
-                    <label for="tripStartDate">Start Date:</label>
-                    <input type="date" class="form-control" id="tripStartDate">
+            <div id="destinationContainer">
+                <div class="form-group destination-entry">
+                    <label for="destination-1">Destination:</label>
+                    <select class="form-control" id="destination-1">
+                        <option value="">Select Destination</option>
+                    </select>
+                    <div class="form-row">
+                        <div class="form-group col-md-6">
+                            <label for="tripStartDate-1">Start Date:</label>
+                            <input type="date" class="form-control" id="tripStartDate-1">
+                        </div>
+                        <div class="form-group col-md-6">
+                            <label for="tripEndDate-1">End Date:</label>
+                            <input type="date" class="form-control" id="tripEndDate-1">
+                        </div>
+                    </div>
                 </div>
-                <div class="form-group col-md-6">
-                    <label for="tripEndDate">End Date:</label>
-                    <input type="date" class="form-control" id="tripEndDate">
-                </div>
             </div>
+            <button type="button" class="btn btn-outline-primary" id="addDestination">Add Another Destination</button>
         `;
     }
 
@@ -144,28 +190,31 @@ export default class NewTripView extends AbstractView {
     accommodationInputHtml() {
         return `
             <h2>Accommodation Details</h2>
-            <div class="form-group">
-                <label for="accommodationType">Accommodation Type:</label>
-                <select class="form-control" id="accommodationType">
-                    <option value="">Select Accommodation Type</option>
-                    <option value="hotel">Hotel</option>
-                    <option value="hostel">Hostel</option>
-                    <option value="airbnb">Airbnb</option>
-                    <option value="resort">Resort</option>
-                    <option value="guesthouse">Guesthouse</option>
-                    <option value="other">Other</option>
-                </select>
-            </div>
-            <div class="form-row">
-                <div class="form-group col-md-6">
-                    <label for="accommodationStartDate">Start Date:</label>
-                    <input type="date" class="form-control" id="accommodationStartDate">
+            <div id="accommodationContainer">
+                <div class="form-group accommodation-entry">
+                    <label for="accommodationType-1">Accommodation Type:</label>
+                    <select class="form-control" id="accommodationType-1">
+                        <option value="">Select Accommodation Type</option>
+                        <option value="hotel">Hotel</option>
+                        <option value="hostel">Hostel</option>
+                        <option value="airbnb">Airbnb</option>
+                        <option value="resort">Resort</option>
+                        <option value="guesthouse">Guesthouse</option>
+                        <option value="other">Other</option>
+                    </select>
+                    <div class="form-row">
+                        <div class="form-group col-md-6">
+                            <label for="accommodationStartDate-1">Start Date:</label>
+                            <input type="date" class="form-control" id="accommodationStartDate-1">
+                        </div>
+                        <div class="form-group col-md-6">
+                            <label for="accommodationEndDate-1">End Date:</label>
+                            <input type="date" class="form-control" id="accommodationEndDate-1">
+                        </div>
+                    </div>
                 </div>
-                <div class="form-group col-md-6">
-                    <label for="accommodationEndDate">End Date:</label>
-                    <input type="date" class="form-control" id="accommodationEndDate">
-                </div>
             </div>
+            <button type="button" class="btn btn-outline-primary" id="addAccommodation">Add Another Accommodation</button>
         `;
     }
 
@@ -176,28 +225,35 @@ export default class NewTripView extends AbstractView {
             <div class="form-row">
                 <div class="form-group col-md-4">
                     <label for="breakfast">Breakfast ($):</label>
-                    <input type="number" class="form-control" id="breakfast">
+                    <input type="number" class="form-control" id="breakfast" value="0">
                 </div>
                 <div class="form-group col-md-4">
                     <label for="lunch">Lunch ($):</label>
-                    <input type="number" class="form-control" id="lunch">
+                    <input type="number" class="form-control" id="lunch" value="0">
                 </div>
                 <div class="form-group col-md-4">
                     <label for="dinner">Dinner ($):</label>
-                    <input type="number" class="form-control" id="dinner">
+                    <input type="number" class="form-control" id="dinner" value="0">
                 </div>
             </div>
+            <p><strong>Daily Total:</strong> $<span id="dailyTotal">0</span></p>
+            <p><strong>Trip Total:</strong> $<span id="tripTotal">0</span></p>
         `;
-    }
+    }    
 
     // HTML template for activities input section
     activitiesHtml() {
         return `
             <h2>Activities</h2>
-            <div class="form-group">
-                <label for="activities">List your activities, one per line (format: activity - date):</label>
-                <textarea class="form-control" id="activities" rows="5"></textarea>
+            <div id="activitiesContainer">
+                <div class="form-group activity-entry">
+                    <label for="activityName-1">Activity:</label>
+                    <input type="text" class="form-control" id="activityName-1" placeholder="Enter activity name">
+                    <label for="activityDate-1">Date:</label>
+                    <input type="date" class="form-control" id="activityDate-1">
+                </div>
             </div>
+            <button type="button" class="btn btn-outline-primary" id="addActivity">Add Activity</button>
         `;
     }
 
@@ -205,10 +261,15 @@ export default class NewTripView extends AbstractView {
     additionalCostsHtml() {
         return `
             <h2>Additional Costs</h2>
-            <div class="form-group">
-                <label for="additionalCosts">List additional costs, one per line (format: cost - amount):</label>
-                <textarea class="form-control" id="additionalCosts" rows="5"></textarea>
+            <div id="additionalCostsContainer">
+                <div class="form-group cost-entry">
+                    <label for="costName-1">Cost Description:</label>
+                    <input type="text" class="form-control" id="costName-1" placeholder="Enter cost description">
+                    <label for="costAmount-1">Amount ($):</label>
+                    <input type="number" class="form-control" id="costAmount-1">
+                </div>
             </div>
+            <button type="button" class="btn btn-outline-primary" id="addCost">Add Cost</button>
         `;
     }
 
@@ -234,36 +295,6 @@ export default class NewTripView extends AbstractView {
             console.error("Error fetching countries:", error);
             alert("Error fetching country data. Please try again later.");
         }
-    }
-
-    // Attaches listeners to the people counter buttons
-    attachPeopleCounterListeners() {
-        const numPeopleInput = document.getElementById("numPeople");
-        const decreasePeopleBtn = document.getElementById("decreasePeople");
-        const increasePeopleBtn = document.getElementById("increasePeople");
-
-        decreasePeopleBtn.addEventListener("click", () => {
-            if (numPeopleInput.value > 1) {
-                numPeopleInput.value--;
-            }
-        });
-
-        increasePeopleBtn.addEventListener("click", () => {
-            numPeopleInput.value++;
-        });
-    }
-
-    // Attaches a listener to the traveling with select dropdown
-    attachTravelingWithListener() {
-        const travellingWithSelect = document.getElementById("travellingWith");
-        const customTravellingWithInput = document.getElementById("customTravellingWith");
-
-        travellingWithSelect.addEventListener("change", () => {
-            customTravellingWithInput.classList.toggle("d-none", travellingWithSelect.value !== "custom");
-            if (travellingWithSelect.value !== "custom") {
-                customTravellingWithInput.value = "";
-            }
-        });
     }
 
     // Attaches a listener to the submit button to handle form submission
@@ -296,52 +327,54 @@ export default class NewTripView extends AbstractView {
         const numPeople = document.getElementById("numPeople").value;
         const travellingWith = document.getElementById("travellingWith").value;
         const customTravellingWith = document.getElementById("customTravellingWith").value;
-        const destination = document.getElementById("destination").value.trim();
-        const tripStartDate = document.getElementById("tripStartDate").value;
-        const tripEndDate = document.getElementById("tripEndDate").value;
-
-        const accommodationType = document.getElementById("accommodationType").value;
-        const accommodationStartDate = document.getElementById("accommodationStartDate").value;
-        const accommodationEndDate = document.getElementById("accommodationEndDate").value;
-
-        const breakfast = document.getElementById("breakfast").value || '0';
-        const lunch = document.getElementById("lunch").value || '0';
-        const dinner = document.getElementById("dinner").value || '0';
-
-        const activitiesText = document.getElementById("activities").value;
-        const additionalCostsText = document.getElementById("additionalCosts").value;
-
-        const parseLineItems = (text, delimiter = '-') => {
-            return text.split('\n')
-                .filter(Boolean)
-                .map(line => {
-                    const [name, valueStr] = line.split(delimiter);
-                    if (!name || !valueStr) return null;
-                    return { name: name.trim(), value: parseFloat(valueStr.trim()) || valueStr.trim() };
-                })
-                .filter(Boolean);
-        };
-
-        const activities = parseLineItems(activitiesText);
-        const additionalCosts = parseLineItems(additionalCostsText);
-
+        const destinations = Array.from(document.getElementsByClassName("destination-entry")).map((entry, index) => ({
+            destination: entry.querySelector(`#destination-${index + 1}`).value,
+            startDate: entry.querySelector(`#tripStartDate-${index + 1}`).value,
+            endDate: entry.querySelector(`#tripEndDate-${index + 1}`).value
+        }));
+    
+        const accommodations = Array.from(document.getElementsByClassName("accommodation-entry")).map((entry, index) => ({
+            type: entry.querySelector(`#accommodationType-${index + 1}`).value,
+            startDate: entry.querySelector(`#accommodationStartDate-${index + 1}`).value,
+            endDate: entry.querySelector(`#accommodationEndDate-${index + 1}`).value
+        }));
+    
+        const breakfast = parseFloat(document.getElementById("breakfast").value) || 0;
+        const lunch = parseFloat(document.getElementById("lunch").value) || 0;
+        const dinner = parseFloat(document.getElementById("dinner").value) || 0;
+    
+        const activities = Array.from(document.getElementsByClassName("activity-entry")).map((entry, index) => ({
+            name: entry.querySelector(`#activityName-${index + 1}`).value,
+            date: entry.querySelector(`#activityDate-${index + 1}`).value
+        }));
+    
+        const additionalCosts = Array.from(document.getElementsByClassName("cost-entry")).map((entry, index) => ({
+            description: entry.querySelector(`#costName-${index + 1}`).value,
+            amount: parseFloat(entry.querySelector(`#costAmount-${index + 1}`).value)
+        }));
+    
+        // Calculate trip duration
+        const tripStartDate = new Date(destinations[0]?.startDate || null);
+        const tripEndDate = new Date(destinations[destinations.length - 1]?.endDate || null);
+        const tripDuration = Math.ceil((tripEndDate - tripStartDate) / (1000 * 60 * 60 * 24)) || 0;
+    
+        const dailyMealCost = breakfast + lunch + dinner;
+        const totalTripCost = dailyMealCost * tripDuration + additionalCosts.reduce((total, cost) => total + cost.amount, 0);
+    
         return {
             numPeople,
             travellingWith,
             customTravellingWith,
-            destination,
-            tripStartDate,
-            tripEndDate,
-            accommodation: {
-                type: accommodationType,
-                startDate: accommodationStartDate,
-                endDate: accommodationEndDate,
-            },
+            destinations,
+            accommodations,
             breakfast,
             lunch,
             dinner,
             activities,
             additionalCosts,
+            tripDuration,
+            dailyMealCost,
+            totalTripCost
         };
     }
 }
