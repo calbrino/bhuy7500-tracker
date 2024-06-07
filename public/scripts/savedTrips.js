@@ -1,5 +1,3 @@
-//savedTrips.js
-
 import AbstractView from "./abstractView.js";
 import { attachDeleteTripListeners, attachToggleDetailsListeners } from "./eventListeners.js";
 
@@ -9,7 +7,6 @@ export default class SavedTripsView extends AbstractView {
         this.setTitle("Di - Saved Trips");
     }
 
-    // Helper function to format dates
     formatDate(dateStr) {
         const date = new Date(dateStr);
         const day = date.getDate().toString().padStart(2, '0');
@@ -18,20 +15,22 @@ export default class SavedTripsView extends AbstractView {
         return `${day}/${month}/${year}`;
     }
 
-    // Capitalize the first letter of each word in a string
     capitalize(text) {
+        if (typeof text !== 'string') {
+            return '';
+        }
         return text.replace(/\b\w/g, char => char.toUpperCase());
     }
 
-    // Renders the HTML content of the view
     async getHtml() {
         const trips = JSON.parse(localStorage.getItem("tripData")) || [];
+        console.log("Fetched trips from localStorage:", trips); // Debugging log
 
         let tripDetailsHtml = `
             <div class="saved-trips-container">
                 <h1>My Saved Trips</h1>
                 <p>Here are the details of your saved trips.</p>
-                <div class="saved-trips-content"> <!-- Inner container for scrollable content -->
+                <div class="saved-trips-content">
         `;
 
         if (trips.length > 0) {
@@ -62,7 +61,6 @@ export default class SavedTripsView extends AbstractView {
                         <h5 class="card-title">General Information</h5>
                         <p class="card-text"><strong>Number of People:</strong> ${trip.numPeople || 'N/A'}</p>
                         <p class="card-text"><strong>Travel Style:</strong> ${trip.travellingWith === "custom" ? trip.customTravellingWith : trip.travellingWith || 'N/A'}</p>
-                        <p class="card-text"><strong>Trip Duration:</strong> ${trip.tripDuration || 'N/A'} days</p>
                         
                         <hr>
 
@@ -111,7 +109,7 @@ export default class SavedTripsView extends AbstractView {
             tripDetailsHtml += "<p>No saved trips yet.</p>";
         }
 
-        tripDetailsHtml += '</div></div>'; // Close inner container and outer container
+        tripDetailsHtml += '</div></div>';
 
         return `
           <head>
@@ -124,13 +122,13 @@ export default class SavedTripsView extends AbstractView {
         `;
     }
 
-    // Initializes view-specific elements and event listeners
     async init() {
+        console.log("Initializing SavedTripsView"); // Debugging log
+        await super.init();
         attachDeleteTripListeners(this.deleteTrip.bind(this));
         attachToggleDetailsListeners();
     }
 
-    // Deletes a trip from local storage and reloads the view
     deleteTrip(index) {
         let trips = JSON.parse(localStorage.getItem("tripData")) || [];
         trips.splice(index, 1);

@@ -25,7 +25,7 @@ export default class NewTripView extends AbstractView {
     constructor(params) {
         super(params);
         this.setTitle("Di - New Trip");
-        this.currentStep = 0; // Track the current step
+        this.currentStep = 0; // Track the current step in the multi view form pagination
         this.totalSteps = 6; // Total number of steps
     }
 
@@ -37,11 +37,12 @@ export default class NewTripView extends AbstractView {
                 <link rel="stylesheet" href="public/index.css">
             </head>
             <body>
+            
                 <div class="container form-container mt-4">
                     <div id="step-container">
                         <h1>Plan Your Trip</h1><br>
                         <div class="progress fixed-progress">
-                            <div class="progress-bar" role="progressbar" style="width: 0%;" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100"></div>
+                        <div class="progress-bar" role="progressbar" style="width: 0%;" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100"></div>
                         </div>
                         <div class="scrollable-content">
                             <form id="tripForm" class="form mt-2">
@@ -152,7 +153,7 @@ export default class NewTripView extends AbstractView {
         return Math.ceil((endDate - startDate) / (1000 * 60 * 60 * 24));
     }
 
-    // Populates the destination dropdown with country names
+    // Populates the destination dropdown with country names using restcountries api
     async populateCountriesDropdown(selectId) {
         const destinationSelect = document.getElementById(selectId);
         const apiUrl = "https://restcountries.com/v3.1/all";
@@ -174,6 +175,20 @@ export default class NewTripView extends AbstractView {
             console.error("Error fetching countries:", error);
             alert("Error fetching country data. Please try again later.");
         }
+    }
+
+    // Validate the entire form before submission
+    validateForm() {
+        const form = document.getElementById("tripForm");
+        const inputs = form.querySelectorAll("input[required], select[required]");
+
+        for (const input of inputs) {
+            if (!input.value) {
+                alert("Please fill out all required fields.");
+                return false;
+            }
+        }
+        return true;
     }
 
     // Attaches a listener to the submit button to handle form submission
@@ -201,20 +216,6 @@ export default class NewTripView extends AbstractView {
                 }
             }
         });
-    }
-
-    // Validate the entire form before submission
-    validateForm() {
-        const form = document.getElementById("tripForm");
-        const inputs = form.querySelectorAll("input[required], select[required]");
-
-        for (const input of inputs) {
-            if (!input.value) {
-                alert("Please fill out all required fields.");
-                return false;
-            }
-        }
-        return true;
     }
 
     // Collects form data from the inputs
@@ -254,7 +255,7 @@ export default class NewTripView extends AbstractView {
         const tripDuration = Math.ceil((tripEndDate - tripStartDate) / (1000 * 60 * 60 * 24)) || 0;
 
         const dailyMealCost = breakfast + lunch + dinner;
-        const totalTripCost = dailyMealCost * tripDuration + additionalCosts.reduce((total, cost) => total + cost.amount, 0);
+        const totalTripCost = dailyMealCost * tripDuration;
 
         return {
             numPeople,

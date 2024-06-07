@@ -31,7 +31,11 @@ export default class {
                         <a class="navbar-brand" href="/homepage">
                             <img id="logoImage" src="${logoSrc}" height="30" alt="Di Trip Planner Logo">
                         </a>
-                        <div class="navbar-collapse" id="navbarNav">
+                        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" 
+                        aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+                            <span class="navbar-toggler-icon"></span>
+                        </button>
+                        <div class="collapse navbar-collapse" id="navbarNav">
                             <ul class="navbar-nav ml-auto">
                                 <li class="nav-item">
                                     <a class="nav-link" href="/newtrip" data-link>New Trip</a>
