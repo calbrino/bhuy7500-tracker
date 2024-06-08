@@ -2,14 +2,15 @@
 
 ## Table of Contents
 1. [Overview](#overview)
-2. [Configuration & Deployment](#configuration--deployment)
+2. [Version Control](#version-control)
+3. [Configuration & Deployment](#configuration--deployment)
    - [Installation](#installation)
    - [Optimal Screen Size](#optimal-screen-size)
-3. [Development Process](#development-process)
-4. [Challenges and Solutions](#challenges-and-solutions)
-5. [Notable Iterations and Changes](#notable-iterations-and-changes)
-6. [References](#references)
-7. [Acknowledgment and Reference of Generative AI Usage](#acknowledgment-and-reference-of-generative-ai-usage)
+4. [Development Process](#development-process)
+5. [Challenges and Solutions](#challenges-and-solutions)
+6. [Notable Iterations and Changes](#notable-iterations-and-changes)
+7. [References](#references)
+8. [Acknowledgment and Reference of Generative AI Usage](#acknowledgment-and-reference-of-generative-ai-usage)
 
 ## Overview
 Di Trip Planner is a single-page architecture web application designed to help users plan and manage their holiday trips efficiently and in a structured manner. It consists of three main sections, each functioning with a unique purpose:
@@ -17,11 +18,18 @@ Di Trip Planner is a single-page architecture web application designed to help u
 2. **New Trip**: Plan your trips with a detailed multi-step form.
 3. **Saved Trips**: View and manage your saved trips.
 
+## Version Control
+This project uses Git and GitHub for updating changes and managing development of Di Trip Planner. Please see the GitHub repository here: [Di Trip Planner GitHub Repository](https://github.com/calbrino/bhuy7500-tracker).
+
 ## Configuration & Deployment
 
 ### Installation
 1. **Clone the Repository**
-   - Download Di as a ZIP file: The file for Di Trip Planner can be downloaded from Navigate to the main page of the repository on GitHub, click the green ‘Code’ button and then download as ZIP. Extract the ZIP file to access the files.
+   - **Download Di as a ZIP file**: The file for Di Trip Planner can be downloaded from Navigate to the main page of the repository on GitHub, click the green ‘Code’ button and then download as ZIP. Extract the ZIP file to access the files.
+   - **Clone with Git**: If you have Git installed on your device, you can log the following command into your terminal to clone the repository:
+     ```sh
+     git clone https://github.com/calbrino/bhuy7500-tracker.git
+     ```
 
 2. **Install Node.js Dependencies**
    - Install Node.js onto your local machine. Then, open the project folder in Visual Studio Code or another code editor and use the terminal to run:
@@ -35,7 +43,7 @@ Di Trip Planner is a single-page architecture web application designed to help u
      ```sh
      npm run dev
      ```
-   - After the server starts, you should see a message in the terminal stating that the server is running at `http://localhost:1234`. Open the link in your browser (e.g. Chrome) and the web application should be ready to use.
+   - After the server starts, you should see a message in the terminal stating that the server is running at `http://localhost:1234`. In the terminal, hold the control key and click with your left mouse button to open up the localhost link to use the application.
 
 ### Optimal Screen Size
 The web application is responsive, but it has been primarily designed for desktops with extensive support for mobile. The recommended and most common screen sizes are:
@@ -100,7 +108,9 @@ The layout of the `savedTrips` view was updated to be more user-friendly and rea
 - Added comments and documentation to the code for better readability and maintainability.
 
 ## References
-- Bose, S. (2023, October 2). What is the Ideal Screen Size for Responsive Design | BrowserStack. BrowserStack. https://www.browserstack.com/guide/ideal-screen-sizes-for-responsive-design
+- Bose, S. (2023, October 2). What is the Ideal Screen
+
+ Size for Responsive Design | BrowserStack. BrowserStack. https://www.browserstack.com/guide/ideal-screen-sizes-for-responsive-design
 - Contributors, M. O. J. T. a. B. (n.d.). Progress. https://getbootstrap.com/docs/4.0/components/progress/
 - Convert string to Title Case with JavaScript. (n.d.). Stack Overflow. https://stackoverflow.com/questions/196972/convert-string-to-title-case-with-javascript
 - Date - JavaScript | MDN. (2024, June 5). MDN Web Docs. https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Date
