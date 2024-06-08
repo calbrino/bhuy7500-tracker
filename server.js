@@ -4,7 +4,7 @@ const app = express();
 const port = 1234;
 
 // Serve static files from the 'dist' directory (created by Parcel)
-app.use(express.static(path.join(__dirname, 'dist'))); 
+app.use(express.static(path.join(__dirname, 'dist')));
 
 // Catch-all route for SPA routing
 app.get('*', (req, res) => {
