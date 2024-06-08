@@ -1,5 +1,11 @@
 // eventListeners.js
 
+// ------------------------------------------------------------------------------------------------------------------------------------------------
+
+// event listeners for newTrip.js
+
+// Attached listener to the people counter buttons on side of the input field
+// https://www.w3schools.com/jsref/met_element_addeventlistener.asp
 export function attachPeopleCounterListeners() {
     const numPeopleInput = document.getElementById("numPeople");
     const decreasePeopleBtn = document.getElementById("decreasePeople");
@@ -16,6 +22,8 @@ export function attachPeopleCounterListeners() {
     });
 }
 
+// Toggles the visibility of the custom input field when the user selects 'custom; on dropdown
+// JavaScript DOM Manipulation – Full Course for Beginners https://www.youtube.com/watch?v=5fb2aPlgoys
 export function attachTravelingWithListener() {
     const travellingWithSelect = document.getElementById("travellingWith");
     const customTravellingWithInput = document.getElementById("customTravellingWith");
@@ -28,6 +36,8 @@ export function attachTravelingWithListener() {
     });
 }
 
+// Attached listener to add another activity field when clicked
+// https://dev.to/getsmartwebsite/creating-dynamic-form-fields-with-html-css-and-javascript-a-comprehensive-guide-46bn
 export function attachActivityListeners() {
     const addActivityBtn = document.getElementById("addActivity");
     addActivityBtn.addEventListener("click", () => {
@@ -46,6 +56,7 @@ export function attachActivityListeners() {
     });
 }
 
+// Attached listener to add new additional cost fields when clicked
 export function attachAdditionalCostsListeners() {
     const addCostBtn = document.getElementById("addCost");
     addCostBtn.addEventListener("click", () => {
@@ -64,6 +75,8 @@ export function attachAdditionalCostsListeners() {
     });
 }
 
+// Attached listener to add new destination dropdown, start, end dates and also populate the dropdown with country names
+// https://developer.mozilla.org/en-US/docs/Web/API/Element/addEventListener
 export function attachDestinationListeners(populateCountriesDropdown) {
     const addDestinationBtn = document.getElementById("addDestination");
     addDestinationBtn.addEventListener("click", async () => {
@@ -95,6 +108,7 @@ export function attachDestinationListeners(populateCountriesDropdown) {
     });
 }
 
+// Attached listener to add new accommodation fields when clicked
 export function attachAccommodationListeners() {
     const addAccommodationBtn = document.getElementById("addAccommodation");
     addAccommodationBtn.addEventListener("click", () => {
@@ -129,6 +143,8 @@ export function attachAccommodationListeners() {
     });
 }
 
+// Attached listener to update trip duration based on selected dates
+// https://www.freecodecamp.org/news/javascript-event-listeners
 export function attachDateListeners(updateTripDuration) {
     const startDateInputs = document.querySelectorAll("[id^='tripStartDate-']");
     const endDateInputs = document.querySelectorAll("[id^='tripEndDate-']");
@@ -141,6 +157,7 @@ export function attachDateListeners(updateTripDuration) {
     endDateInputs.forEach(input => input.addEventListener("change", updateAllDurations));
 }
 
+// Attached listener to meal budgeting input fields to calculate and update daily and total meal costs
 export function attachMealBudgetListeners(tripDurationGetter) {
     const breakfastInput = document.getElementById("breakfast");
     const lunchInput = document.getElementById("lunch");
@@ -164,10 +181,15 @@ export function attachMealBudgetListeners(tripDurationGetter) {
     lunchInput.addEventListener("input", calculateTotals);
     dinnerInput.addEventListener("input", calculateTotals);
 
-    // Update totals initially
+    // Calculated totals initially
     calculateTotals();
 }
 
+// ------------------------------------------------------------------------------------------------------------------------------------------------
+
+// event listeners for savedTrips.js
+
+// Attached listeners to the delete trip buttons to handle form deletion
 export function attachDeleteTripListeners(deleteTripCallback) {
     const deleteButtons = document.querySelectorAll("[id^='deleteTrip-']");
     deleteButtons.forEach(button => {
@@ -178,6 +200,7 @@ export function attachDeleteTripListeners(deleteTripCallback) {
     });
 }
 
+// Attached listeners to toggle trip details accoridan visibility on click
 export function attachToggleDetailsListeners() {
     const toggleButtons = document.querySelectorAll(".toggle-details");
     toggleButtons.forEach(button => {

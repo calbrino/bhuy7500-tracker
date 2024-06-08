@@ -1,4 +1,9 @@
 // formTemplates.js
+
+// This page is the HTML content for my newTrips.js file, as the contents were too long on one page, I decided to split it up
+// Layout in the order of sequence in the multi 'page' form entry.
+
+// HTML for initial destination and date tracker
 export function destinationInputHtml() {
     return `
         <h2>Destination Details</h2>
@@ -24,6 +29,7 @@ export function destinationInputHtml() {
     `;
 }
 
+// HTML for the quantity of people going
 export function peopleInputHtml() {
     return `
         <h2>People Details</h2>
@@ -42,6 +48,7 @@ export function peopleInputHtml() {
     `;
 }
 
+// HTML for the style of travel e.g. friends, family, group tour...
 export function travelWithInputHtml() {
     return `
         <div class="form-group">
@@ -58,6 +65,7 @@ export function travelWithInputHtml() {
     `;
 }
 
+// HTML for where you are staying and for how long
 export function accommodationInputHtml() {
     return `
         <h2>Accommodation Details</h2>
@@ -89,6 +97,7 @@ export function accommodationInputHtml() {
     `;
 }
 
+// HTML for meal budgeting
 export function mealBudgetingHtml() {
     return `
         <h2>Meal Budgeting</h2>
@@ -111,6 +120,7 @@ export function mealBudgetingHtml() {
     `;
 }
 
+// HTML for the activities you want to do on the trip and the dates
 export function activitiesHtml() {
     return `
         <h2>Activities</h2>
@@ -126,6 +136,7 @@ export function activitiesHtml() {
     `;
 }
 
+// HTML for the all other costs not covered by a specific form e.g. plane ticket, insurance...
 export function additionalCostsHtml() {
     return `
         <h2>Additional Costs</h2>

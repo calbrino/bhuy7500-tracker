@@ -1,4 +1,4 @@
-//abstractView.js
+// abstractView.js
 
 import logoSrc from '../src/logo.png';
 
@@ -7,18 +7,19 @@ export default class {
         this.params = params;
     }
 
+    // Set the document title to the given title
     setTitle(title) {
         document.title = title;
     }
 
+    // This method is overridden to return specific HTML content for the view
     async getHtml() {
         return "";
     }
 
-    async init() {
-        // Initialize view-specific elements
-    }
+    async init() {}
 
+    // Renders the navigation bar aswell as the background animation by inserting the HTML content into the main container
     async render() {
         const viewHtml = await this.getHtml();
 

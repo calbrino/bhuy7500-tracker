@@ -1,3 +1,6 @@
+// scripts.js
+// Build a Single Page Application with JavaScript (No Frameworks) https://www.youtube.com/watch?v=6BozpmSjk-Y
+
 import homePage from "./scripts/homePage.js";
 import newTrip from "./scripts/newTrip.js";
 import savedTrips from "./scripts/savedTrips.js";

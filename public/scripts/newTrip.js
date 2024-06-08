@@ -1,4 +1,4 @@
-//newTrip.js
+// newTrip.js
 
 import AbstractView from "./abstractView.js";
 import {
@@ -25,9 +25,11 @@ export default class NewTripView extends AbstractView {
     constructor(params) {
         super(params);
         this.setTitle("Di - New Trip");
-        this.currentStep = 0; // Track the current step in the multi view form pagination
-        this.totalSteps = 6; // Total number of steps
+        this.currentStep = 0; // Current step in the form
+        this.totalSteps = 6; // Total steps in the form
     }
+
+    // ------------------------------------------------------------------------------------------------------------------------------------------------
 
     // Renders the HTML content of the view
     async getHtml() {
@@ -37,12 +39,11 @@ export default class NewTripView extends AbstractView {
                 <link rel="stylesheet" href="public/index.css">
             </head>
             <body>
-            
                 <div class="container form-container mt-4">
                     <div id="step-container">
                         <h1>Plan Your Trip</h1><br>
                         <div class="progress fixed-progress">
-                        <div class="progress-bar" role="progressbar" style="width: 0%;" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100"></div>
+                            <div class="progress-bar" role="progressbar" style="width: 0%;" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100"></div>
                         </div>
                         <div class="scrollable-content">
                             <form id="tripForm" class="form mt-2">
@@ -78,22 +79,24 @@ export default class NewTripView extends AbstractView {
         `;
     }
 
-    // Initialize event listeners for pagination
+    // ------------------------------------------------------------------------------------------------------------------------------------------------
+
+    // Initialize event listeners for form steps and actions
     async init() {
-        attachPeopleCounterListeners();
-        attachTravelingWithListener();
-        await this.populateCountriesDropdown('destination-1');
-        this.attachStepListeners();
-        this.attachSubmitTripListener();
-        attachActivityListeners();
-        attachAdditionalCostsListeners();
-        attachDestinationListeners(this.populateCountriesDropdown);
-        attachAccommodationListeners();
-        attachMealBudgetListeners(() => this.getTripDuration());
-        attachDateListeners(() => this.getTripDuration());
+        attachPeopleCounterListeners(); // Add listeners for people count
+        attachTravelingWithListener(); // Add listeners for travel group
+        await this.populateCountriesDropdown('destination-1'); // Load country options
+        this.attachStepListeners(); // Handle form step navigation
+        this.attachSubmitTripListener(); // Handle form submission
+        attachActivityListeners(); // Add listeners for activities
+        attachAdditionalCostsListeners(); // Add listeners for additional costs
+        attachDestinationListeners(this.populateCountriesDropdown); // Add listeners for destinations
+        attachAccommodationListeners(); // Add listeners for accommodations
+        attachMealBudgetListeners(() => this.getTripDuration()); // Add listeners for meal budgeting
+        attachDateListeners(() => this.getTripDuration()); // Add listeners for dates
     }
 
-    // Attach listeners to the navigation buttons
+    // Attach listeners to the navigation buttons to navigated between next and previous steps
     attachStepListeners() {
         const nextStepBtn = document.getElementById("nextStep");
         const prevStepBtn = document.getElementById("prevStep");
@@ -107,7 +110,8 @@ export default class NewTripView extends AbstractView {
         prevStepBtn.addEventListener("click", () => this.changeStep(-1));
     }
 
-    // Validate the current step before proceeding
+    // Validate the current steps to check that all required fields are filled out
+    // How to Detect User Input with JavaScript https://www.youtube.com/watch?v=TuDp9m1zYww
     validateCurrentStep() {
         const currentStepElement = document.querySelector(`.step#step-${this.currentStep}`);
         const inputs = currentStepElement.querySelectorAll("input, select");
@@ -121,7 +125,8 @@ export default class NewTripView extends AbstractView {
         return true;
     }
 
-    // Change the step in the form
+    // Change the step in the form and update the progress bar
+    // https://getbootstrap.com/docs/4.0/components/progress/
     changeStep(direction) {
         const steps = document.querySelectorAll(".step");
         steps[this.currentStep].style.display = "none";
@@ -145,6 +150,7 @@ export default class NewTripView extends AbstractView {
         progressBar.setAttribute("aria-valuenow", progress);
     }
 
+    // Calculate the trip duration based on the start and end dates
     getTripDuration() {
         const tripStartDate = document.getElementById("tripStartDate-1").value;
         const tripEndDate = document.getElementById("tripEndDate-1").value;
@@ -153,7 +159,9 @@ export default class NewTripView extends AbstractView {
         return Math.ceil((endDate - startDate) / (1000 * 60 * 60 * 24));
     }
 
-    // Populates the destination dropdown with country names using restcountries api
+    // Populate the destination dropdown with country names using the RestCountries API
+    // https://developer.mozilla.org/en-US/docs/Web/API/Fetch_API/Using_Fetch
+    // https://www.w3schools.com/js/js_api_intro.asp
     async populateCountriesDropdown(selectId) {
         const destinationSelect = document.getElementById(selectId);
         const apiUrl = "https://restcountries.com/v3.1/all";
@@ -177,7 +185,7 @@ export default class NewTripView extends AbstractView {
         }
     }
 
-    // Validate the entire form before submission
+    // Validate and check the entire form before submission
     validateForm() {
         const form = document.getElementById("tripForm");
         const inputs = form.querySelectorAll("input[required], select[required]");
@@ -191,7 +199,11 @@ export default class NewTripView extends AbstractView {
         return true;
     }
 
-    // Attaches a listener to the submit button to handle form submission
+    // ------------------------------------------------------------------------------------------------------------------------------------------------
+
+    // Attach a listener to the submit button to handle form submission to local storage
+    // //  Build a Notes App with JavaScript & Local Storage (No Frameworks) https://youtu.be/01YKQmia2Jw?si=moEP9sxe99Sd9Kmd
+    // https://developer.mozilla.org/en-US/docs/Web/API/Window/localStorage
     attachSubmitTripListener() {
         document.getElementById("submitTrip").addEventListener("click", (event) => {
             event.preventDefault();
@@ -218,7 +230,8 @@ export default class NewTripView extends AbstractView {
         });
     }
 
-    // Collects form data from the inputs
+    // Collect and structure the form data from the inputs
+    // https://developer.mozilla.org/en-US/docs/Web/API/FormData
     getFormData() {
         const numPeople = document.getElementById("numPeople").value;
         const travellingWith = document.getElementById("travellingWith").value;
@@ -249,7 +262,8 @@ export default class NewTripView extends AbstractView {
             amount: parseFloat(entry.querySelector(`#costAmount-${index + 1}`).value)
         }));
 
-        // Calculate trip duration
+        // Calculate trip duration, meal cost per day and total meal cost
+        // https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Date
         const tripStartDate = new Date(destinations[0]?.startDate || null);
         const tripEndDate = new Date(destinations[destinations.length - 1]?.endDate || null);
         const tripDuration = Math.ceil((tripEndDate - tripStartDate) / (1000 * 60 * 60 * 24)) || 0;

@@ -25,6 +25,8 @@ body {
   color: inherit;
 }
 
+// ------------------------------------------------------------------------------------------------------------------------------------------------
+
 /* Navigation Bar */
 .navbar {
   background-color: $light-color;
@@ -75,7 +77,9 @@ body {
   }
 }
 
-/* Hero Section */
+// ------------------------------------------------------------------------------------------------------------------------------------------------
+
+// Hero section styling
 .hero {
   display: flex;
   justify-content: center;
@@ -148,6 +152,8 @@ body {
   }
 }
 
+// ------------------------------------------------------------------------------------------------------------------------------------------------
+
 /* Multi-Step Form */
 .step {
   padding: 20px;
@@ -185,6 +191,8 @@ body {
   padding-right: 15px; /* Avoid content clipping */
 }
 
+// ------------------------------------------------------------------------------------------------------------------------------------------------
+
 /* Saved Trips Styles */
 .saved-trips-container {
   padding: 2rem;
@@ -211,11 +219,11 @@ body {
   }
 }
 
-/* Inner container for scrollable content */
+// Inner container for scrollable content
 .saved-trips-content {
-  height: calc(70vh - 5rem); /* Adjust height to fit within the parent container */
-  overflow-y: auto; /* Enable vertical scrolling */
-  padding-right: 1rem; /* Add some padding to avoid scrollbar overlapping content */
+  height: calc(70vh - 5rem); // Adjust height to fit within the parent container
+  overflow-y: auto; // Enable vertical scrolling
+  padding-right: 1rem; // Add some padding to avoid scrollbar overlapping content
 }
 
 .card {
@@ -258,6 +266,8 @@ body {
   }
 }
 
+// ------------------------------------------------------------------------------------------------------------------------------------------------
+
 .trip-entry {
   margin-bottom: 1rem;
 
@@ -270,7 +280,7 @@ body {
       .toggle-details {
           font-size: 1.25rem;
           text-decoration: none;
-          color: $text-color; // Use the regular text color
+          color: $text-color;
           background: none;
           border: none;
           padding: 0;
@@ -293,7 +303,9 @@ body {
   }
 }
 
-/* Progress Bar */
+// ------------------------------------------------------------------------------------------------------------------------------------------------
+
+// Progress Bar
 .progress {
   height: 20px;
   background-color: #e9ecef;
@@ -305,6 +317,10 @@ body {
   }
 }
 
+// ------------------------------------------------------------------------------------------------------------------------------------------------
+
+// AUTO CHANGING BACKGROUND IMAGE USING HTML AND CSS || SOURCE CODE https://www.youtube.com/watch?v=IwEqvjsDVU0&t=175s 
+// https://github.com/i-amsagar/Auto-Changing-Background
 .Section_top {
   width: 100%;
   height: 100vh; // Ensure it covers the full viewport height
